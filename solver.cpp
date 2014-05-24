@@ -14,9 +14,9 @@ SOLVER::SOLVER(int n, int in_n_lin, int in_n_col)
 
 	permutas.set_n(n);
 
-	tabs_thr = new bool[GloabalData::getNumberOfCores()];
+	tabs_thr = new bool[GlobalData::getNumberOfCores()];
 
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		TABULEIRO* novo_tab = new TABULEIRO(in_n_lin, in_n_col);
@@ -51,9 +51,9 @@ void SOLVER::lanca_trabalhadores()
 	int i;
 
 	// lança a threads
-	thrs = new boost::thread*[GloabalData::getNumberOfCores()];
+	thrs = new boost::thread*[GlobalData::getNumberOfCores()];
 
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		thrs[i] = new boost::thread(boost::bind(&SOLVER::trabalhador, this));
@@ -81,7 +81,7 @@ void SOLVER::trabalhador()
 	// encontra o indice de tabela disponivel
 	key_tabs_thr.lock();
 
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		if(tabs_thr[i] == false)
@@ -321,7 +321,7 @@ void SOLVER::espra_por_threads()
 	if(lancadas)
 	{
 
-		for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+		for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 		{
 
 			thrs[i]->join();

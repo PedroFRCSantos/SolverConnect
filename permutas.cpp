@@ -46,7 +46,7 @@ PERMUTAS::~PERMUTAS()
 
 	delete num;
 
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		delete parcial_tab[i];
@@ -65,9 +65,9 @@ void PERMUTAS::estima_permutacoes_possiveis()
 
 	num = new bool[n];
 
-	parcial_tab = new int*[GloabalData::getNumberOfCores()];
+	parcial_tab = new int*[GlobalData::getNumberOfCores()];
 
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		parcial_tab[i] = new int[n];
@@ -75,7 +75,7 @@ void PERMUTAS::estima_permutacoes_possiveis()
 	}
 
 	// encontra permutações possiveis
-	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
+	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
 
 		// reset num

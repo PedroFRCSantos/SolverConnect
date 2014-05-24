@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	cout << "Insira o numero de colunas:" << endl;
 	cin >> n_col;
 
-	GloabalData::setNumberPoints(n_cores);
+	GlobalData::setNumberPoints(n_cores);
 
 	SOLVER solver(n_cores, n_lin, n_col);
 

@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
 
-class GloabalData
+class GlobalData
 {
 
 	private:

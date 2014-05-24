@@ -4,9 +4,9 @@
 #include "GlobalData.hpp"
 #include <boost/thread/thread.hpp>
 
-int GloabalData::numberCores = 0;
+int GlobalData::numberCores = 0;
 
-void GloabalData::setNumberPoints(int nPoints)
+void GlobalData::setNumberPoints(int nPoints)
 {
 
 	int n = boost::thread::hardware_concurrency();
@@ -24,9 +24,9 @@ void GloabalData::setNumberPoints(int nPoints)
 
 }
 
-int GloabalData::getNumberOfCores()
+int GlobalData::getNumberOfCores()
 {
 
-	return GloabalData::numberCores;
+	return GlobalData::numberCores;
 
 }
