@@ -1,2 +1,8 @@
 /Debug
 /Release
+/targetver.h
+/stdafx.cpp
+/ReadMe.txt
+/SolverConnect.vcxproj
+/SolverConnect.vcxproj.filters
+/stdafx.h

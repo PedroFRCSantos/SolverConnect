@@ -37,8 +37,6 @@ class PERMUTAS
 
 		void estima_permutacoes_possiveis();
 
-		int numero_cores();
-
 		void calcula_numero_combinacoes(); 
 
 };

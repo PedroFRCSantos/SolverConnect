@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "permutas.hpp"
+#include "GlobalData.hpp"
 
 PERMUTAS::PERMUTAS()
 {}
@@ -45,7 +46,7 @@ PERMUTAS::~PERMUTAS()
 
 	delete num;
 
-	for(i = 0; i < numero_cores(); i++)
+	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
 	{
 
 		delete parcial_tab[i];
@@ -64,9 +65,9 @@ void PERMUTAS::estima_permutacoes_possiveis()
 
 	num = new bool[n];
 
-	parcial_tab = new int*[numero_cores()];
+	parcial_tab = new int*[GloabalData::getNumberOfCores()];
 
-	for(i = 0; i < numero_cores() && i < n; i++)
+	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
 	{
 
 		parcial_tab[i] = new int[n];
@@ -74,7 +75,7 @@ void PERMUTAS::estima_permutacoes_possiveis()
 	}
 
 	// encontra permutações possiveis
-	for(i = 0; i < numero_cores() && i < n; i++)
+	for(i = 0; i < GloabalData::getNumberOfCores(); i++)
 	{
 
 		// reset num
@@ -186,36 +187,6 @@ void PERMUTAS::estima_permutacoes_possiveis()
 
 	}
 	cout << endl;*/
-
-}
-
-int PERMUTAS::numero_cores()
-{
-
-	// para teste
-	return 10;
-
-	/*#ifdef WIN32
-		SYSTEM_INFO sysinfo;
-		GetSystemInfo(&sysinfo);
-		return sysinfo.dwNumberOfProcessors;
-	#elif MACOS
-		int nm[2];
-		size_t len = 4;
-		uint32_t count;
-
-		nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
-		sysctl(nm, 2, &count, &len, NULL, 0);
-
-		if(count < 1) {
-			nm[1] = HW_NCPU;
-			sysctl(nm, 2, &count, &len, NULL, 0);
-			if(count < 1) { count = 1; }
-		}
-		return count;
-	#else
-		return sysconf(_SC_NPROCESSORS_ONLN);
-	#endif*/
 
 }
 

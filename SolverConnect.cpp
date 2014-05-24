@@ -5,6 +5,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "solver.hpp"
+#include "GlobalData.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -21,6 +22,8 @@ int main(int argc, char* argv[])
 
 	cout << "Insira o numero de colunas:" << endl;
 	cin >> n_col;
+
+	GloabalData::setNumberPoints(n_cores);
 
 	SOLVER solver(n_cores, n_lin, n_col);
 
@@ -48,6 +51,9 @@ int main(int argc, char* argv[])
 
 	solver.lanca_trabalhadores();
 	solver.espra_por_threads();
+
+	cout << "Press enter to continue...." << endl;
+	cin >> desig;
 
 	return 0;
 

@@ -55,8 +55,6 @@ class SOLVER
 
 		void trabalhador();
 
-		int numero_cores();
-
 };
 
 #endif
