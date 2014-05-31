@@ -134,7 +134,7 @@ void SOLVER::trabalho_realizar(int* ordem, int id_tab)
 	{
 
 		cout << "Tabuleiro inicial!!!" << endl;
-		tabs[id_tab]->print_tabuleiro();
+		tabs[id_tab]->print_tabuleiro(true);
 
 	}
 
@@ -167,24 +167,26 @@ void SOLVER::recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem)
 
 		//cout << "cheguie ao outro ponto!!!" << endl;
 
-		// passa para a procima cor
+		// passa para a proxima cor
 		id_ordem++;
 
 		if(id_ordem == permutas.get_numero_cores())
 		{
 
 			// verifica se o tabuleiro é valido
+			print_sol.lock();
+
 			if(tabs[id_tab]->verifica_sol() && encontrada == false)
 			{
 
 				encontrada = true;
 
-				print_sol.lock();
 				cout << "Solução encontrada:" << endl;
-				tabs[id_tab]->print_tabuleiro();
-				print_sol.unlock();
+				tabs[id_tab]->print_tabuleiro(true);
 
 			}
+
+			print_sol.unlock();
 
 			return;
 
@@ -211,6 +213,7 @@ void SOLVER::recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem)
 
 				//cout << "cima" << endl;
 				tabs[id_tab]->set_dados(aux_i, aux_j, designacao[ordem[id_ordem]-1]);
+				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursao_solver(aux_i, aux_j, id_tab, ordem, id_ordem);
 
 				// repoe caso seja possivel
@@ -239,6 +242,7 @@ void SOLVER::recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem)
 
 				//cout << "baixo" << endl;
 				tabs[id_tab]->set_dados(aux_i, aux_j, designacao[ordem[id_ordem]-1]);
+				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursao_solver(aux_i, aux_j, id_tab, ordem, id_ordem);
 
 				// repoe caso seja possivel
@@ -267,6 +271,7 @@ void SOLVER::recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem)
 
 				//cout << "esquerda" << endl;
 				tabs[id_tab]->set_dados(aux_i, aux_j, designacao[ordem[id_ordem]-1]);
+				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursao_solver(aux_i, aux_j, id_tab, ordem, id_ordem);
 
 				// repoe caso seja possivel
@@ -295,6 +300,7 @@ void SOLVER::recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem)
 
 				//cout << "direita" << endl;
 				tabs[id_tab]->set_dados(aux_i, aux_j, designacao[ordem[id_ordem]-1]);
+				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursao_solver(aux_i, aux_j, id_tab, ordem, id_ordem);
 
 				// repoe caso seja possivel

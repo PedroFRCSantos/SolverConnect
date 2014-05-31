@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
 	ifstream configFile;
 
-	if(argc != 2)
+	if(argc == 1)
 	{
 
 		cout << "Insira o numero de cores:" << endl;
@@ -106,8 +106,8 @@ int main(int argc, char* argv[])
 	solver.espra_por_threads();
 
 	cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
-	cout << "Press enter to continue...." << endl;
-	cin >> desig;
+	//cout << "Press enter to continue...." << endl;
+	//cin >> desig;
 
 	return 0;
 

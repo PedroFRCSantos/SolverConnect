@@ -11,11 +11,13 @@ TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
 	n_col = in_n_col;
 
 	dados = new char*[n_lin];
+	prevNode = new matixIndex*[n_lin];
 
 	for(i = 0; i < n_lin; i++)
 	{
 
 		dados[i] = new char[n_col];
+		prevNode[i] = new matixIndex[n_col];
 
 	}
 
@@ -25,8 +27,34 @@ TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
 
 void TABULEIRO::set_dados(int i, int j, char data_in)
 {
+	
+	// verify limits
+	if(!(i >= 0 && j >= 0 && i < n_lin && j < n_col))
+	{
+	
+		throw("Board out of range in set_dados!!!");
+
+	}
 
 	dados[i][j] = data_in;
+
+}
+
+void TABULEIRO::setPreviousNode(int iAnt, int jAnt, int iAct, int jAct)
+{
+
+	// verify limits
+	if(!(iAnt >= 0 && jAnt >= 0 && iAnt < n_lin && jAnt < n_col && iAct >= 0 && jAct >= 0 && iAct < n_lin && jAct < n_col))
+	{
+	
+		throw("Board out of range in setPreviousNode!!!");
+
+	}
+
+	matixIndex antNode;
+	antNode.indI = iAnt; antNode.indJ = jAnt;
+
+	prevNode[iAct][jAct] = antNode;
 
 }
 
@@ -42,6 +70,10 @@ void TABULEIRO::reset_tab()
 
 	int i, j;
 
+	matixIndex emptyVal;
+	emptyVal.indI = -1;
+	emptyVal.indJ = -1;
+
 	for(i = 0; i < n_lin; i++)
 	{
 
@@ -49,6 +81,7 @@ void TABULEIRO::reset_tab()
 		{
 
 			dados[i][j] = '\0';
+			prevNode[i][j] = emptyVal;
 
 		}
 
@@ -154,6 +187,38 @@ void TABULEIRO::print_tabuleiro()
 
 }
 
+void TABULEIRO::print_tabuleiro(bool write2File)
+{
+
+	print_tabuleiro();
+
+	if(write2File)
+	{
+	
+		ofstream resultFile("result.txt");
+		int i, j;
+
+		for(i = 0; i < n_lin; i++)
+		{
+
+			for(j = 0; j < n_col; j++)
+			{
+
+				if(dados[i][j] != '\0')
+				{
+
+					resultFile << i << " " << j << " " << dados[i][j] << " " << prevNode[i][j].indI << " " << prevNode[i][j].indJ << endl;
+				
+				}
+
+			}
+
+		}
+	
+	}
+
+}
+
 TABULEIRO::~TABULEIRO()
 {
 
@@ -163,10 +228,12 @@ TABULEIRO::~TABULEIRO()
 	{
 
 		delete dados[i];
+		delete prevNode[i];
 
 	}
 
 	delete dados;
+	delete prevNode;
 
 }
 
