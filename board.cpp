@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "tabuleiro.hpp"
+#include "board.hpp"
 
 TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
 {

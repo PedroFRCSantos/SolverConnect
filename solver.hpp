@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 #include "permutas.hpp"
-#include "tabuleiro.hpp"
+#include "board.hpp"
 
 using namespace std;
 
