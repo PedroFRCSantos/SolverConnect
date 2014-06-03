@@ -2,7 +2,7 @@
 
 #include "board.hpp"
 
-TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
+BOARD::BOARD(int in_n_lin, int in_n_col)
 {
 
 	int i;
@@ -10,13 +10,13 @@ TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
 	n_lin = in_n_lin;
 	n_col = in_n_col;
 
-	dados = new char*[n_lin];
+	data = new char*[n_lin];
 	prevNode = new matixIndex*[n_lin];
 
 	for(i = 0; i < n_lin; i++)
 	{
 
-		dados[i] = new char[n_col];
+		data[i] = new char[n_col];
 		prevNode[i] = new matixIndex[n_col];
 
 	}
@@ -25,7 +25,7 @@ TABULEIRO::TABULEIRO(int in_n_lin, int in_n_col)
 
 }
 
-void TABULEIRO::set_dados(int i, int j, char data_in)
+void BOARD::set_data(int i, int j, char data_in)
 {
 	
 	// verify limits
@@ -36,11 +36,11 @@ void TABULEIRO::set_dados(int i, int j, char data_in)
 
 	}
 
-	dados[i][j] = data_in;
+	data[i][j] = data_in;
 
 }
 
-void TABULEIRO::setPreviousNode(int iAnt, int jAnt, int iAct, int jAct)
+void BOARD::setPreviousNode(int iAnt, int jAnt, int iAct, int jAct)
 {
 
 	// verify limits
@@ -58,14 +58,14 @@ void TABULEIRO::setPreviousNode(int iAnt, int jAnt, int iAct, int jAct)
 
 }
 
-char TABULEIRO::get_dados(int i, int j)
+char BOARD::get_data(int i, int j)
 {
 
-	return dados[i][j];
+	return data[i][j];
 
 }
 
-void TABULEIRO::reset_tab()
+void BOARD::reset_tab()
 {
 
 	int i, j;
@@ -80,7 +80,7 @@ void TABULEIRO::reset_tab()
 		for(j = 0; j < n_col; j++)
 		{
 
-			dados[i][j] = '\0';
+			data[i][j] = '\0';
 			prevNode[i][j] = emptyVal;
 
 		}
@@ -89,7 +89,7 @@ void TABULEIRO::reset_tab()
 
 }
 
-bool TABULEIRO::verifica_sol()
+bool BOARD::verify_sol()
 {
 
 	int i, j;
@@ -101,7 +101,7 @@ bool TABULEIRO::verifica_sol()
 		for(j = 0; j < n_col; j++)
 		{
 
-			if(dados[i][j] == '\0')
+			if(data[i][j] == '\0')
 			{
 
 				return false;
@@ -116,21 +116,21 @@ bool TABULEIRO::verifica_sol()
 
 }
 
-int TABULEIRO::get_n_linhas()
+int BOARD::get_n_lines()
 {
 
 	return n_lin;
 
 }
 
-int TABULEIRO::get_n_colunas()
+int BOARD::get_n_columns()
 {
 
 	return n_col;
 
 }
 
-void TABULEIRO::print_tabuleiro()
+void BOARD::print_board()
 {
 
 	int i, j;
@@ -151,14 +151,14 @@ void TABULEIRO::print_tabuleiro()
 		for(j = 0; j < n_col; j++)
 		{
 
-			if(dados[i][j] == '\0')
+			if(data[i][j] == '\0')
 			{
 
 				printf("| ");
 
 			}else{
 
-				printf("|%c", dados[i][j]);
+				printf("|%c", data[i][j]);
 
 			}
 
@@ -187,10 +187,10 @@ void TABULEIRO::print_tabuleiro()
 
 }
 
-void TABULEIRO::print_tabuleiro(bool write2File)
+void BOARD::print_board(bool write2File)
 {
 
-	print_tabuleiro();
+	print_board();
 
 	if(write2File)
 	{
@@ -204,10 +204,10 @@ void TABULEIRO::print_tabuleiro(bool write2File)
 			for(j = 0; j < n_col; j++)
 			{
 
-				if(dados[i][j] != '\0')
+				if(data[i][j] != '\0')
 				{
 
-					resultFile << i << " " << j << " " << dados[i][j] << " " << prevNode[i][j].indI << " " << prevNode[i][j].indJ << endl;
+					resultFile << i << " " << j << " " << data[i][j] << " " << prevNode[i][j].indI << " " << prevNode[i][j].indJ << endl;
 				
 				}
 
@@ -219,7 +219,7 @@ void TABULEIRO::print_tabuleiro(bool write2File)
 
 }
 
-TABULEIRO::~TABULEIRO()
+BOARD::~BOARD()
 {
 
 	int i;
@@ -227,12 +227,12 @@ TABULEIRO::~TABULEIRO()
 	for(i = 0; i < n_lin; i++)
 	{
 
-		delete dados[i];
+		delete data[i];
 		delete prevNode[i];
 
 	}
 
-	delete dados;
+	delete data;
 	delete prevNode;
 
 }

@@ -1,5 +1,5 @@
-#ifndef _TABULEIRO
-#define _TABULEIRO
+#ifndef _BOARD
+#define _BOARD
 
 #include <stdio.h>
 #include <iostream>
@@ -21,40 +21,39 @@ typedef struct _matixIndex {
 
 }matixIndex;
 
-class TABULEIRO
+class BOARD
 {
 
 	private:
 
-		char** dados;
+		char** data;
 		matixIndex** prevNode;
 		int n_lin, n_col;
 
 	public:
 
-		TABULEIRO(int in_n_lin, int in_n_col);
+		BOARD(int in_n_lin, int in_n_col);
 
-		void set_dados(int i, int j, char data_in);
+		void set_data(int i, int j, char data_in);
 
 		void setPreviousNode(int iAnt, int jAnt, int iAct, int jAct);
 
-		char get_dados(int i, int j);
+		char get_data(int i, int j);
 
 		void reset_tab();
 
-		int get_n_linhas();
+		int get_n_lines();
 
-		int get_n_colunas();
+		int get_n_columns();
 
-		void print_tabuleiro();
+		void print_board();
 
-		void print_tabuleiro(bool write2File);
+		void print_board(bool write2File);
 
-		bool verifica_sol();
+		bool verify_sol();
 
-		~TABULEIRO();
+		~BOARD();
 
 };
 
 #endif
-

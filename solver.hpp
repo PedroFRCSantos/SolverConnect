@@ -20,40 +20,40 @@ class SOLVER
 
 		PERMUTAS permutas;
 
-		vector<TABULEIRO*> tabs;
+		vector<BOARD*> tabs;
 		bool* tabs_thr;
-		int* linhas1;
-		int* colunas1;
-		int* linhas2;
-		int* colunas2;
-		char* designacao;
+		int* lines1;
+		int* columns1;
+		int* lines2;
+		int* columns2;
+		char* designation;
 
 		boost::mutex key_tabs_thr;
 		boost::thread** thrs;
-		bool lancadas;
-		bool encontrada;
+		bool launched;
+		bool found;
 		boost::mutex print_sol;
-		bool init_printado;
+		bool init_print;
 
 	public:
 
 		SOLVER(int n, int in_n_lin, int in_n_col);
 
-		void set_linhas_colunas_id(int linha1, int coluna1, int linha2, int coluna2,int id, int index);
+		void set_lines_columns_id(int line1In, int column1In, int line2In, int column2In,int idIn, int indexIn);
 
-		void lanca_trabalhadores();
+		void launch_workers();
 
-		void trabalho_realizar(int* ordem, int id_tab);
+		void work_to_do(int* order, int id_tab);
 
-		void recursao_solver(int i, int j, int id_tab, int* ordem, int id_ordem);
+		void recursion_solver(int i, int j, int id_tab, int* order, int id_order);
 
-		void espra_por_threads();
+		void wait_for_threads();
 
 		~SOLVER();
 
 	private:
 
-		void trabalhador();
+		void workers();
 
 };
 

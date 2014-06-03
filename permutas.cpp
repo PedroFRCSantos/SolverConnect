@@ -13,7 +13,7 @@ PERMUTAS::PERMUTAS(int n_in)
 
 }
 
-int* PERMUTAS::get_ordem_tentativa(int ind)
+int* PERMUTAS::get_order_of_try(int ind)
 {
 
 	return parcial_tab[ind];
@@ -25,14 +25,14 @@ void PERMUTAS::set_n(int n_in)
 
 	n = n_in;
 
-	calcula_numero_combinacoes();
+	calculate_number_combinations();
 
-	cout << "Numero de cores: " << n << endl;
-	estima_permutacoes_possiveis();
+	cout << "Number of colors: " << n << endl;
+	estimate_possible_permutations();
 
 }
 
-int PERMUTAS::get_numero_cores()
+int PERMUTAS::get_number_colors()
 {
 
 	return n;
@@ -57,7 +57,7 @@ PERMUTAS::~PERMUTAS()
 
 }
 
-void PERMUTAS::estima_permutacoes_possiveis()
+void PERMUTAS::estimate_possible_permutations()
 {
 
 	int i, j, k, ind;
@@ -160,37 +160,11 @@ void PERMUTAS::estima_permutacoes_possiveis()
 
 		}
 
-		// teste
-		/*for(j = 0; j < n; j++)
-		{
-
-			parcial_tab[i][j] = n-j;
-			cout << n-j << endl;
-
-		}*/
-
 	}
-
-	// para teste
-	/*cout << endl;
-	for(i = 0; i < numero_cores() && i < n; i++)
-	{
-
-		for(j = 0; j < n; j++)
-		{
-
-			cout << parcial_tab[i][j] << " ";
-
-		}
-
-		cout << endl;
-
-	}
-	cout << endl;*/
 
 }
 
-void PERMUTAS::calcula_numero_combinacoes()
+void PERMUTAS::calculate_number_combinations()
 {
 
 	int resultado = 1;
@@ -203,7 +177,7 @@ void PERMUTAS::calcula_numero_combinacoes()
 
 	}
 
-	n_possibilidades = resultado;
+	n_possibilities = resultado;
 
 }
 

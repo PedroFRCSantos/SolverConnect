@@ -12,7 +12,7 @@
 int main(int argc, char* argv[])
 {
 
-	int n_cores, n_col, n_lin, n_col2, n_lin2;
+	int n_color, n_col, n_lin, n_col2, n_lin2;
 	int i;
 	char desig;
 	bool usedFile = false;
@@ -22,13 +22,13 @@ int main(int argc, char* argv[])
 	if(argc == 1)
 	{
 
-		cout << "Insira o numero de cores:" << endl;
-		cin >> n_cores;
+		cout << "Insert number of pairs of points:" << endl;
+		cin >> n_color;
 
-		cout << "Insira o numero de linhas:" << endl;
+		cout << "Insert number of lines:" << endl;
 		cin >> n_lin;
 
-		cout << "Insira o numero de colunas:" << endl;
+		cout << "Insert number of colomns:" << endl;
 		cin >> n_col;
 
 	} else{
@@ -44,45 +44,45 @@ int main(int argc, char* argv[])
 			configFile >> n_lin;
 			configFile >> n_col;
 
-			configFile >> n_cores;
+			configFile >> n_color;
 
 		}
 	
 	}
 
-	GlobalData::setNumberPoints(n_cores);
+	GlobalData::setNumberPoints(n_color);
 
-	SOLVER solver(n_cores, n_lin, n_col);
+	SOLVER solver(n_color, n_lin, n_col);
 
 	if(!usedFile)
 	{
 
-		for(i = 0; i < n_cores; i++)
+		for(i = 0; i < n_color; i++)
 		{
 
-			cout << "Insira a linha1(1-n) da cor "<< i+1 << ":" << endl;
+			cout << "Insert the line1(1-n) associated to color "<< i+1 << ":" << endl;
 			cin >> n_lin;
 
-			cout << "Insira a coluna1(1-n) da cor "<< i+1 << ":" << endl;
+			cout << "Insert the column1(1-n) associated to color "<< i+1 << ":" << endl;
 			cin >> n_col;
 
-			cout << "Insira a linha2(1-n) da cor "<< i+1 << ":" << endl;
+			cout << "Insert the line2(1-n) associated to color "<< i+1 << ":" << endl;
 			cin >> n_lin2;
 
-			cout << "Insira a coluna2(1-n) da cor "<< i+1 << ":" << endl;
+			cout << "Insert the column1(1-n) associated to color "<< i+1 << ":" << endl;
 			cin >> n_col2;
 
-			cout << "Insira a designacao:" << endl;
+			cout << "Insert the designation:" << endl;
 			cin >> desig;
 
-			solver.set_linhas_colunas_id(n_lin-1, n_col-1, n_lin2-1, n_col2-1,desig, i);
+			solver.set_lines_columns_id(n_lin-1, n_col-1, n_lin2-1, n_col2-1,desig, i);
 
 		}
 
 	} else{
 	
 		// read final definitions
-		for(i = 0; i < n_cores; i++)
+		for(i = 0; i < n_color; i++)
 		{
 		
 			configFile >> n_lin;
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 			configFile >> n_col2;
 			configFile >> desig;
 
-			solver.set_linhas_colunas_id(n_lin-1, n_col-1, n_lin2-1, n_col2-1,desig, i);
+			solver.set_lines_columns_id(n_lin-1, n_col-1, n_lin2-1, n_col2-1,desig, i);
 		
 		}
 
@@ -102,8 +102,8 @@ int main(int argc, char* argv[])
 	std::clock_t start;
 	start = std::clock();
 
-	solver.lanca_trabalhadores();
-	solver.espra_por_threads();
+	solver.launch_workers();
+	solver.wait_for_threads();
 
 	cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 	//cout << "Press enter to continue...." << endl;
