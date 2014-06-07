@@ -9,8 +9,13 @@ SOLVER::SOLVER(int n, int in_n_lin, int in_n_col)
 	int i;
 
 	found = false;
-	launched = false;
-	init_print =  false;
+
+	#ifdef USE_MULTI_THREAD
+
+		launched = false;
+		init_print =  false;
+
+	#endif
 
 	permutas.set_n(n);
 
@@ -48,20 +53,28 @@ void SOLVER::set_lines_columns_id(int line1In, int column1In, int line2In, int c
 void SOLVER::launch_workers()
 {
 
-	int i;
+	#ifdef USE_MULTI_THREAD
 
-	// lança a threads
-	thrs = new boost::thread*[GlobalData::getNumberOfCores()];
+		int i;
 
-	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
-	{
+		// launches threads
+		thrs = new boost::thread*[GlobalData::getNumberOfCores()];
 
-		thrs[i] = new boost::thread(boost::bind(&SOLVER::workers, this));
-		//cout << "Thread " << i << " criada!!!" << endl;
+		for(i = 0; i < GlobalData::getNumberOfCores(); i++)
+		{
 
-	}
+			thrs[i] = new boost::thread(boost::bind(&SOLVER::workers, this));
+			//cout << "Thread " << i << " created!!!" << endl;
 
-	launched = true;
+		}
+
+		launched = true;
+
+	#else
+
+		workers();
+
+	#endif
 
 }
 
@@ -74,12 +87,14 @@ void SOLVER::workers()
 
 	int id_tab;
 
-	//cout << "Sou um trabalhador!!!" << endl;
+	//cout << "I'm a worker!!!" << endl;
 
 	id_tab = -1;
 
-	// encontra o indice de tabela disponivel
+	// finds the index of table available
+	#ifdef USE_MULTI_THREAD
 	key_tabs_thr.lock();
+	#endif
 
 	for(i = 0; i < GlobalData::getNumberOfCores(); i++)
 	{
@@ -95,12 +110,14 @@ void SOLVER::workers()
 
 	}
 
+	#ifdef USE_MULTI_THREAD
 	key_tabs_thr.unlock();
+	#endif
 
 	if(id_tab == -1)
 	{
 
-		//cout << "estou sem trabalho!!!" << endl;
+		//cout << "I'm out of work!!!" << endl;
 		return;
 
 	}
@@ -118,7 +135,7 @@ void SOLVER::work_to_do(int* order, int id_tab)
 
 	tabs[id_tab]->reset_tab();
 
-	// coloca as marcas no lugar
+	// put marks in place
 	for(i = 0; i < permutas.get_number_colors(); i++)
 	{
 
@@ -127,20 +144,29 @@ void SOLVER::work_to_do(int* order, int id_tab)
 
 	}
 
-	// imprime tabuleiro inicial
-	print_sol.lock();
+	// prints initial board
+	#ifdef USE_MULTI_THREAD
 
-	if(init_print == false)
-	{
+		print_sol.lock();
+
+		if(init_print == false)
+		{
+
+			cout << "Initial Board!!!" << endl;
+			tabs[id_tab]->print_board(true);
+
+		}
+
+		init_print = true;
+
+		print_sol.unlock();
+
+	#else
 
 		cout << "Initial Board!!!" << endl;
 		tabs[id_tab]->print_board(true);
 
-	}
-
-	init_print = true;
-
-	print_sol.unlock();
+	#endif
 
 	recursion_solver(lines1[order[0]-1], columns1[order[0]-1], id_tab, order, 0);
 
@@ -161,20 +187,22 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 	}
 
-	// caso tenha chegado ao outro ponto
+	// in case to arrive to another point
 	if(lines2[order[id_order]-1] == i && columns2[order[id_order]-1] == j)
 	{
 
-		//cout << "cheguie ao outro ponto!!!" << endl;
+		//cout << "arrived to another point!!!" << endl;
 
-		// passa para a proxima cor
+		// passes to the next color
 		id_order++;
 
 		if(id_order == permutas.get_number_colors())
 		{
 
-			// verifica se o tabuleiro é valido
+			// checks if the board is valid
+			#ifdef USE_MULTI_THREAD
 			print_sol.lock();
+			#endif
 
 			if(tabs[id_tab]->verify_sol() && found == false)
 			{
@@ -186,7 +214,9 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 			}
 
+			#ifdef USE_MULTI_THREAD
 			print_sol.unlock();
+			#endif
 
 			return;
 
@@ -198,8 +228,8 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 	}else{
 
-		// caso não tenha atigido o outro tenta andar
-		// para cima
+		// case has not reached the other tries to walk
+		// up
 		if(i > 0)
 		{
 
@@ -211,12 +241,12 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 			if(tabs[id_tab]->get_data(aux_i, aux_j) == '\0' || (tabs[id_tab]->get_data(aux_i, aux_j) == designation[order[id_order]-1] && lines2[order[id_order]-1] == aux_i && columns2[order[id_order]-1] == aux_j))
 			{
 
-				//cout << "cima" << endl;
+				//cout << "up" << endl;
 				tabs[id_tab]->set_data(aux_i, aux_j, designation[order[id_order]-1]);
 				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursion_solver(aux_i, aux_j, id_tab, order, id_order);
 
-				// repoe caso seja possivel
+				// Resets if possible
 				if(ant == '\0')
 				{
 
@@ -228,7 +258,7 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 		}
 
-		// para baixo
+		// down
 		if(i < tabs[id_tab]->get_n_lines()-1)
 		{
 
@@ -240,12 +270,12 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 			if(tabs[id_tab]->get_data(aux_i, aux_j) == '\0' || (tabs[id_tab]->get_data(aux_i, aux_j) == designation[order[id_order]-1] && lines2[order[id_order]-1] == aux_i && columns2[order[id_order]-1] == aux_j))
 			{
 
-				//cout << "baixo" << endl;
+				//cout << "down" << endl;
 				tabs[id_tab]->set_data(aux_i, aux_j, designation[order[id_order]-1]);
 				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursion_solver(aux_i, aux_j, id_tab, order, id_order);
 
-				// repoe caso seja possivel
+				// Resets if possible
 				if(ant == '\0')
 				{
 
@@ -257,7 +287,7 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 		}
 
-		// esquerda
+		// left
 		if(j > 0)
 		{
 
@@ -269,12 +299,12 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 			if(tabs[id_tab]->get_data(aux_i, aux_j) == '\0' || (tabs[id_tab]->get_data(aux_i, aux_j) == designation[order[id_order]-1] && lines2[order[id_order]-1] == aux_i && columns2[order[id_order]-1] == aux_j))
 			{
 
-				//cout << "esquerda" << endl;
+				//cout << "left" << endl;
 				tabs[id_tab]->set_data(aux_i, aux_j, designation[order[id_order]-1]);
 				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursion_solver(aux_i, aux_j, id_tab, order, id_order);
 
-				// repoe caso seja possivel
+				// Resets if possible
 				if(ant == '\0')
 				{
 
@@ -286,7 +316,7 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 
 		}
 
-		//direita
+		// right
 		if(j < tabs[id_tab]->get_n_columns()-1)
 		{
 
@@ -298,12 +328,12 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 			if(tabs[id_tab]->get_data(aux_i, aux_j) == '\0' || (tabs[id_tab]->get_data(aux_i, aux_j) == designation[order[id_order]-1] && lines2[order[id_order]-1] == aux_i && columns2[order[id_order]-1] == aux_j))
 			{
 
-				//cout << "direita" << endl;
+				//cout << "right" << endl;
 				tabs[id_tab]->set_data(aux_i, aux_j, designation[order[id_order]-1]);
 				tabs[id_tab]->setPreviousNode(i, j, aux_i, aux_j);
 				recursion_solver(aux_i, aux_j, id_tab, order, id_order);
 
-				// repoe caso seja possivel
+				// Resets if possible
 				if(ant == '\0')
 				{
 
@@ -322,6 +352,8 @@ void SOLVER::recursion_solver(int i, int j, int id_tab, int* order, int id_order
 void SOLVER::wait_for_threads()
 {
 
+	#ifdef USE_MULTI_THREAD
+
 	int i;
 
 	if(launched)
@@ -338,6 +370,8 @@ void SOLVER::wait_for_threads()
 		delete thrs;
 
 	}
+
+	#endif
 
 }
 

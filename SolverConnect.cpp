@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <boost/thread/thread.hpp>
+#include <ctime>
 
 #include "solver.hpp"
 #include "GlobalData.hpp"

@@ -1,8 +1,6 @@
 #ifndef _PERMUTAS
 #define _PERMUTAS
 
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <stdlib.h>
 

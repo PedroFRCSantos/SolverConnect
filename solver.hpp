@@ -1,14 +1,18 @@
 #ifndef _SOLVER
 #define _SOLVER
 
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/thread.hpp>
 #include <iostream>
 #include <vector>
 #include <stdlib.h>
 
 #include "permutas.hpp"
 #include "board.hpp"
+#include "GlobalData.hpp"
+
+#ifdef USE_MULTI_THREAD
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+#endif
 
 using namespace std;
 
@@ -28,12 +32,17 @@ class SOLVER
 		int* columns2;
 		char* designation;
 
-		boost::mutex key_tabs_thr;
-		boost::thread** thrs;
-		bool launched;
 		bool found;
-		boost::mutex print_sol;
-		bool init_print;
+
+		#ifdef USE_MULTI_THREAD
+
+			boost::mutex key_tabs_thr;
+			boost::thread** thrs;
+			bool launched;
+			boost::mutex print_sol;
+			bool init_print;
+
+		#endif
 
 	public:
 

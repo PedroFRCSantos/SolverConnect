@@ -2,25 +2,35 @@
 #include "stdafx.h"
 
 #include "GlobalData.hpp"
+#ifdef USE_MULTI_THREAD
 #include <boost/thread/thread.hpp>
+#endif
 
 int GlobalData::numberCores = 0;
 
 void GlobalData::setNumberPoints(int nPoints)
 {
 
-	int n = boost::thread::hardware_concurrency();
+	#ifdef USE_MULTI_THREAD
 
-	if(nPoints < n)
-	{
+		int n = boost::thread::hardware_concurrency();
+
+		if(nPoints < n)
+		{
 	
-		numberCores = nPoints;
+			numberCores = nPoints;
 	
-	}else{
+		}else{
 
-		numberCores = n;
+			numberCores = n;
 
-	}
+		}
+
+	#else
+
+		numberCores = 1;
+
+	#endif
 
 }
 

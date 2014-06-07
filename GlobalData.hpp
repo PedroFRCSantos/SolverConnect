@@ -1,6 +1,11 @@
 
 #include "stdafx.h"
 
+#ifndef GLOBAL_DATA_HPP
+#define GLOBAL_DATA_HPP
+
+#define USE_MULTI_THREAD
+
 class GlobalData
 {
 
@@ -15,3 +20,5 @@ class GlobalData
 		static int getNumberOfCores();
 
 };
+
+#endif
